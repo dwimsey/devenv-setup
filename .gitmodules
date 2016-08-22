@@ -1,9 +1,12 @@
 [submodule "playbooks/roles/dwimsey.devenv"]
 	path = playbooks/roles/dwimsey.devenv
 	url = https://github.com/dwimsey/devenv.git
+	branch = master
 [submodule "playbooks/roles/dwimsey.devworkstation"]
 	path = playbooks/roles/dwimsey.devworkstation
 	url = https://github.com/dwimsey/devworkstation.git
+	branch = master
 [submodule "playbooks/roles/dwimsey.intellij"]
 	path = playbooks/roles/dwimsey.intellij
 	url = https://github.com/dwimsey/ansible-role-intellij.git
+	branch = master
