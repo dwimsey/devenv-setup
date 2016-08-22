@@ -78,7 +78,7 @@ Vagrant.configure(2) do |config|
 			end
 
 			if (attrs[:provision] == 'ansible')
-				node.vm.provision "ansible_local" do |ansible|
+				node.vm.provision "ansible" do |ansible|
 					# The following two lines are not used in local mode
 					#ansible.ask_vault_pass = attrs[:ansible_ask_vault_pass]|false
 					#ansible.host_key_checking = false
