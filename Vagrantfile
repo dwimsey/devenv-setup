@@ -10,9 +10,10 @@
 boxes = {
 		'devenv' => {
 				:ip => '10.255.255.5',
-				#:box => 'opentable/win-2012r2-standard-amd64-nocm',
-				#:box => 'centos/7',
-				:box => 'ubuntu/trusty64',
+				#:box => 'opentable/win-2012r2-standard-amd64-nocm',	# Windows 2012R2
+				#:box => 'centos/7',																	# CentOS 7
+				:box => 'ubuntu/trusty64',														# Ubuntu 14.04
+				#:box => 'ubuntu/xenial64',														# Ubuntu 16.04
 				:cpus => 2,
 				:memory => 4096,
 				:provision => 'ansible',
@@ -47,7 +48,8 @@ Vagrant.configure(2) do |config|
 	config.ssh.insert_key = false
 
 	# We want to use the virtual box share rather than rsync so doesn't require any manual operations or lag between updates
-	config.vm.synced_folder ".", "/vagrant", type: 'virtualbox'
+	#config.vm.synced_folder ".", "/vagrant", type: 'virtualbox', uid: "#{user}", gid: "#{user}"
+	config.vm.synced_folder ".", "/vagrant", type: 'virtualbox', uid: 1002, gid: 1002
 	#config.vm.synced_folder "..", "/home/#{user}/project", type: 'virtualbox'
 
 	boxes.each do |shortname, attrs|
@@ -80,8 +82,8 @@ Vagrant.configure(2) do |config|
 			if (attrs[:provision] == 'ansible')
 				node.vm.provision "ansible" do |ansible|
 					# The following two lines are not used in local mode
-					#ansible.ask_vault_pass = attrs[:ansible_ask_vault_pass]|false
-					#ansible.host_key_checking = false
+					ansible.ask_vault_pass = attrs[:ansible_ask_vault_pass]|false
+					ansible.host_key_checking = false
 
 					ansible.extra_vars = attrs[:ansible_extra_vars]
 					# We let vagrant manage this file, it'll be in .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
