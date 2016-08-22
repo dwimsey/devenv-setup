@@ -6,12 +6,10 @@ The instructions will provide you with the minimum required setup for developing
 Linux is the primary supported operating system at this time.  Mac OS X and Windows support is being added.
 
 ## Prerequisites
-
-The following are the minimum requirements needed to start this provisioning process:
-
-1. git - Git is required to access the source code repository and the scripts which will provide the base development environment.
-2. bash - The initial configuration scripts are intended to be run from within the Bash shell.  This shell is available out of the box on all platforms except Windows, and is included with msys git on Windows.
-3. Hardware Virtualization support (Testing) - Your CPU must support the POPCNT instruction and the Virtualization features must be enabled in your computers BIOS.  This configuration is beyond the scope of this document as it is unique to each hardware/BIOS combination.
+1. Hardware Virtualization support - Your CPU must support the POPCNT instruction and the Virtualization features must be enabled in your computers BIOS.  This configuration is beyond the scope of this document as it is unique to each hardware/BIOS combination.
+2. git - Git is required to access the source code repository and the scripts which will provide the base development environment.
+3. bash - The initial configuration scripts are intended to be run from within the Bash shell.  This shell is available out of the box on all platforms except Windows, and is included with msys git on Windows.
+4. **VirtualBox - At this time, this documentation requires that VirtualBox 5.1.2 be installed as well.  This requirement will be dropped in the future.**
 
 ### Linux
 CentOS 7 and Ubuntu Linux can be used on workstations and is supported by these configuration/provisioning scripts.  The initial setup is slightly different between these operating systems just due to the difference in native package managers.
