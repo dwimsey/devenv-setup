@@ -16,3 +16,6 @@ elif [ "${ID_LIKE}" = 'rhel fedora' ]; then
 	# Do the actual ansible install
 	sudo yum update && sudo yum install virtualbox ansible vagrant -y
 fi
+
+# Let our workstation setup script run locally
+ansible all -i "localhost," -c local playbooks/devworkstation.yaml
