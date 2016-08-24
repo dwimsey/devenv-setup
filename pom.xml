@@ -73,8 +73,12 @@
 									<arguments>
 										<argument>plugin</argument>
 										<argument>install</argument>
+										<!-- This plugin allows us to easily configure /etc/hosts on the local and remote machines by letting vagrant do the lifting -->
 										<argument>vagrant-hostmanager</argument>
+										<!-- This plugin allows vagrant to manage/update the VirtualBox guest additions -->
 										<argument>vagrant-vbguest</argument>
+										<!-- This plugin allows vagrant to reboot a VM as the final stage of provisioning -->
+										<argument>vagrant-reload</argument>
 									</arguments>
 								</configuration>
 							</execution>
