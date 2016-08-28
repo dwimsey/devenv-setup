@@ -10,3 +10,9 @@
 	path = playbooks/roles/dwimsey.intellij
 	url = https://github.com/dwimsey/ansible-role-intellij.git
 	branch = master
+[submodule "playbooks/roles/geerlingguy.homebrew"]
+	path = playbooks/roles/geerlingguy.homebrew
+	url = https://github.com/dwimsey/ansible-role-homebrew.git
+[submodule "playbooks/roles/dwimsey.oracle-java"]
+	path = playbooks/roles/dwimsey.oracle-java
+	url = https://github.com/dwimsey/ansible-oracle-java
