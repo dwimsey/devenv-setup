@@ -20,7 +20,7 @@ fi
 
 sh platforms/${platform}/setup_${platform}.sh
 
-sudo vagrant plugin install vagrant-hostmanager vagrant-vbguest vagrant-reload
+vagrant plugin install vagrant-hostmanager vagrant-vbguest vagrant-reload
 
 # Install the ansible IntelliJ plugin, so we can get our dev env setup easiest
 #sudo ansible-galaxy install dwimsey.devenv

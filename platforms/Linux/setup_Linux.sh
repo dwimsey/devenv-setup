@@ -1,5 +1,6 @@
 #/usr/bin/env sh
 VAGRANTVERSION=1.8.5
+SSHKEYFILE="${HOME}/.ssh/id_rsa"
 # Pull in OS Release info, so we can determine what we're running under, and the appropriate
 # commands for that OS;  ID_LIKE would be 'debian' for ubuntu, or 'rhel fedora' for centos
 . /etc/os-release
@@ -15,6 +16,11 @@ if [ "${ID_LIKE}" = 'debian' ]; then
 elif [ "${ID_LIKE}" = 'rhel fedora' ]; then
 	# Do the actual ansible install
 	sudo yum update && sudo yum install virtualbox ansible vagrant -y
+fi
+
+if [ ! -f "${HOME}/.ssh/id_rsa" ]; then
+	echo Generating SSH private key ...
+	ssh-keygen -f ${SSHKEYFILE}
 fi
 
 # Let our workstation setup script run locally
