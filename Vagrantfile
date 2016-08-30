@@ -3,9 +3,18 @@
 #
 # Author: David Wimsey <david@wimsey.us>
 #
-# This Vagrant file allows us to rapidly configure a VM using the same scripts used to configure our dev environment
-#Vagrant.require_plugin "vagrant-hostmanager"
-#Vagrant.require_plugin "vagrant-vbguest"
+
+unless Vagrant.has_plugin?("vagrant-hostmanager")
+	unless Vagrant.has_plugin?("vagrant-vbguest")
+		raise 'You must install the vagrant hostmanager and vbguest plugins for this environment to work correctly: vagrant plugin install vagrant-hostmanager vagrant-vbguest'
+	else
+		raise 'You must install the vagrant hostmanager plugin for this environment to work correctly: vagrant plugin install vagrant-hostmanager'
+	end
+else
+	unless Vagrant.has_plugin?("vagrant-vbguest")
+		raise 'You must install the vagrant vbguest plugins for this environment to work correctly: vagrant plugin install vagrant-vbguest'
+	end
+end
 
 boxes = {
 		'devenv' => {
@@ -38,18 +47,18 @@ pubkey = File.readlines(pubkey_path).first.strip
 Vagrant.configure(2) do |config|
 
 # Plugin hostmanager configuration
+	# Plugin hostmanager configuration
 	config.hostmanager.enabled = true
 	config.hostmanager.manage_host = true
 	config.hostmanager.manage_guest = true
 
-# Allow vagrant to SSH between VMs
+	# Allow vagrant to SSH between VMs
 	config.ssh.forward_agent = true
 	config.ssh.private_key_path = ['~/.vagrant.d/insecure_private_key']
 	config.ssh.insert_key = false
 
 	# We want to use the virtual box share rather than rsync so doesn't require any manual operations or lag between updates
 	#config.vm.synced_folder ".", "/vagrant", type: 'virtualbox', uid: "#{user}", gid: "#{user}"
-	config.vm.synced_folder ".", "/vagrant", type: 'virtualbox', uid: 1002, gid: 1002
 	#config.vm.synced_folder "..", "/home/#{user}/project", type: 'virtualbox'
 
 	boxes.each do |shortname, attrs|
@@ -74,16 +83,33 @@ Vagrant.configure(2) do |config|
 
 			node.vbguest.no_install = attrs[:skip_vbguest_additions] || false
 
+			# Run the script which creates a user like ourselves and copies our ssh public key so we can ssh in quickly
+			# This only supports UNIX at this time
+			node.vm.provision "shell" do |shell|
+				shell.name = "Creating privileged user account; user: #{user}, password: #{user}, public key file: #{pubkey_path}"
+				shell.path = "createuser-self.sh"
+				shell.args = [ user, pubkey ]
+			end
+
 			node.vm.provision "shell" do |shell|
 				shell.name   = "Removing hostname from /etc/hosts loopback line; source: http://stackoverflow.com/questions/33117939/vagrant-do-not-map-hostname-to-loopback-address-in-etc-hosts"
 				shell.inline = "sed -ri 's/127\.0\.0\.1\s.*/127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4/' /etc/hosts"
 			end
 
 			if (attrs[:provision] == 'ansible')
+				if OS.windows?
+					puts "Vagrant launched from windows, use at your own peril."
+					ansible_mode = "ansible_local"
+				else
+					ansible_mode = "ansible"
+				end
+
 				node.vm.provision "ansible" do |ansible|
-					# The following two lines are not used in local mode
-					ansible.ask_vault_pass = attrs[:ansible_ask_vault_pass]|false
-					ansible.host_key_checking = false
+					if ansible_mode != 'ansible_local'
+						# The following two lines are not used in local mode
+						ansible.ask_vault_pass = attrs[:ansible_ask_vault_pass]|false
+						ansible.host_key_checking = false
+					end
 
 					ansible.extra_vars = attrs[:ansible_extra_vars]
 					# We let vagrant manage this file, it'll be in .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory
@@ -96,6 +122,31 @@ Vagrant.configure(2) do |config|
 					end
 				end
 			end
+
+			if Vagrant.has_plugin?("vagrant-reload")
+				node.vm.provision :reload
+			else
+				puts "You do not have the vagrant-reload plugin installed, please reboot this box: #{shortname} or run: vagrant plugin install vagrant-reload"
+			end
 		end
 	end
+end
+
+
+module OS
+    def OS.windows?
+        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+    end
+
+    def OS.mac?
+        (/darwin/ =~ RUBY_PLATFORM) != nil
+    end
+
+    def OS.unix?
+        !OS.windows?
+    end
+
+    def OS.linux?
+        OS.unix? and not OS.mac?
+    end
 end
