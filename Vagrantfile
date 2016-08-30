@@ -59,7 +59,6 @@ Vagrant.configure(2) do |config|
 
 	# We want to use the virtual box share rather than rsync so doesn't require any manual operations or lag between updates
 	#config.vm.synced_folder ".", "/vagrant", type: 'virtualbox', uid: "#{user}", gid: "#{user}"
-	#config.vm.synced_folder "..", "/home/#{user}/project", type: 'virtualbox'
 
 	boxes.each do |shortname, attrs|
 
