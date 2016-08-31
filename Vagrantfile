@@ -103,7 +103,7 @@ Vagrant.configure(2) do |config|
 					ansible_mode = "ansible"
 				end
 
-				node.vm.provision "ansible" do |ansible|
+				node.vm.provision ansible_mode do |ansible|
 					if ansible_mode != 'ansible_local'
 						# The following two lines are not used in local mode
 						ansible.ask_vault_pass = attrs[:ansible_ask_vault_pass]|false
