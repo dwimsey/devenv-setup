@@ -31,7 +31,7 @@ boxes = {
 				:ansible_extra_vars => {
 						is_vagrant: true,
 						# The download isn't reliable for us, so we specify the path to the file here
-						intellij_cached_copy: "~/Downloads/ideaIU-{{intellij_version}}{{intellij_pkg_extension}}",
+						#intellij_cached_copy: "~/Downloads/ideaIU-{{intellij_version}}{{intellij_pkg_extension}}",
 				},
 				:skip_vbguest_additions => false,
 		}
