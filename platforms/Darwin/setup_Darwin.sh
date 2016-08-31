@@ -59,14 +59,14 @@ MVNPKGFILE=apache-maven-3.3.9-bin.tar.gz
 curl -L -o /tmp/${MVNPKGFILE} http://apache.claz.org/maven/maven-3/3.3.9/binaries/${MVNPKGFILE}
 sudo mkdir -p /usr/local
 tar zxf /tmp/${MVNPKGFILE}
-mv apache-maven-3.3.9-bin /usr/local/maven
+sudo mv apache-maven-3.3.9 /usr/local/maven
 sudo chown -R root:staff /usr/local/maven
-ln -s /usr/local/maven/bin/mvn /usr/local/bin
+sudo ln -s /usr/local/maven/bin/mvn /usr/local/bin
 
 IJPKGFILE=ideaI${INTELLIJEDITION}-${INTELLIJVERSION}.dmg
 curl -o /tmp/${IJPKGFILE} https://download-cf.jetbrains.com/idea/${IJPKGFILE}
 sudo hdiutil attach /tmp/${IJPKGFILE}
-sudo mv "/Volumes/IntelliJ IDEA/IntelliJ IDEA.app" /Applications
+sudo cp -Rp "/Volumes/IntelliJ IDEA/IntelliJ IDEA.app" /Applications
 sudo hdiutil detach "/Volumes/IntelliJ IDEA"
 
 
