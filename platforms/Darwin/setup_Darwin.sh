@@ -35,3 +35,14 @@ sudo hdiutil attach /tmp/${VBPKGFILE}
 sudo installer -pkg /Volumes/VirtualBox/VirtualBox.pkg -target /
 sudo hdiutil detach /Volumes/VirtualBox
 
+# ARM Hard float ABI 64bit
+# http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-arm64-vfp-hflt.tar.gz
+
+# Windows
+# http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-windows-x64.exe
+
+JDKPKGFILE=jdk-8u101-macosx-x64.dmg
+curl -o /tmp/${JDKPKGFILE} -L -b "oraclelicense=a" http://download.oracle.com/otn-pub/java/jdk/8u101-b13/${JDKPKGFILE}
+sudo hdiutil attach /tmp/${JDKPKGFILE}
+sudo installer -pkg "/Volumes/JDK 8 Update 101/JDK 8 Update 101.pkg" -target /
+sudo hdiutil detach "/Volumes/JDK 8 Update 101"
