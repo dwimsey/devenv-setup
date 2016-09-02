@@ -43,7 +43,7 @@ boxes = {
 						#intellij_cached_copy: "~/Downloads/ideaIU-{{intellij_version}}{{intellij_pkg_extension}}",
 						user: user,
 				},
-				:skip_vbguest_additions => true,
+				:skip_vbguest_additions => false,
 		}
 }
 
