@@ -16,6 +16,13 @@ else
 	end
 end
 
+# Identify user and SSH public key to be used in provisioning later
+require 'etc'
+user = Etc.getlogin
+pubkey_path = "#{Dir.home}/.ssh/id_rsa.pub"
+pubkey = File.readlines(pubkey_path).first.strip
+
+
 boxes = {
 		'devenv' => {
 				:ip => '10.255.255.5',
@@ -25,6 +32,8 @@ boxes = {
 				#:box => 'ubuntu/xenial64',														# Ubuntu 16.04
 				:cpus => 2,
 				:memory => 4096,
+				:vram => '128',
+				:showgui => true,
 				:provision => 'ansible',
 				#:ansible_ask_vault_pass => true,
 				:ansible_playbook => 'playbooks/devworkstation.yml',
@@ -32,16 +41,11 @@ boxes = {
 						is_vagrant: true,
 						# The download isn't reliable for us, so we specify the path to the file here
 						#intellij_cached_copy: "~/Downloads/ideaIU-{{intellij_version}}{{intellij_pkg_extension}}",
+						user: user,
 				},
-				:skip_vbguest_additions => false,
+				:skip_vbguest_additions => true,
 		}
 }
-
-# Identify user and SSH public key to be used in provisioning later
-require 'etc'
-user = Etc.getlogin
-pubkey_path = "#{Dir.home}/.ssh/id_rsa.pub"
-pubkey = File.readlines(pubkey_path).first.strip
 
 # Main vagrant configuration
 Vagrant.configure(2) do |config|
@@ -78,6 +82,8 @@ Vagrant.configure(2) do |config|
 			node.vm.provider "virtualbox" do |v|
 				v.cpus = attrs[:cpus] || 2
 				v.memory = attrs[:memory] || 1024
+				v.customize ["modifyvm", :id, "--vram", attrs[:vram] || '16']
+				v.gui = attrs[:showgui] || false
 			end
 
 			node.vbguest.no_install = attrs[:skip_vbguest_additions] || false
